@@ -22,13 +22,17 @@
     <!-- Properties -->
     <properties>
         <!-- Versioning -->
-        <version.arquillian_core>1.1.5.Final</version.arquillian_core>
+        <version.arquillian_core>1.1.10.Final</version.arquillian_core>
+        <!-- <version.jacoco>0.7.7.201606060606</version.jacoco> -->
         <version.jacoco>0.7.4.201502262128</version.jacoco>
+        
 
         <!-- test -->
-        <version.wildfly>8.2.0.Final</version.wildfly>
+        <version.wildfly>10.0.0.Final</version.wildfly>
         <version.cdi-api>1.2</version.cdi-api>
         <version.ejb3>1.0.0.Final</version.ejb3>
+        <version.wildfly.container.remote>1.1.0.Final</version.wildfly.container.remote>
+        <version.wildfly.container.managed>1.1.0.Final</version.wildfly.container.managed>
 
         <!-- override from parent -->
         <maven.compiler.argument.target>1.5</maven.compiler.argument.target>
@@ -143,9 +147,9 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>org.wildfly</groupId>
+                    <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-managed</artifactId>
-                    <version>${version.wildfly}</version>
+                    <version>${version.wildfly.container.managed}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -183,9 +187,9 @@
             <id>remote</id>
             <dependencies>
                 <dependency>
-                    <groupId>org.wildfly</groupId>
+                    <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <version>${version.wildfly}</version>
+                    <version>${version.wildfly.container.remote}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -265,6 +269,15 @@
     </profiles>
 
     <build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>1.8</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
@@ -274,6 +287,24 @@
                     <localCheckout>true</localCheckout>
                 </configuration>
             </plugin>
+	        <plugin>
+	          <groupId>org.apache.maven.plugins</groupId>
+	          <artifactId>maven-antrun-plugin</artifactId>
+	          <executions>
+	          	<execution>
+	          		<id>testexec</id>
+	          		<phase>compile</phase>
+	          		<goals>
+	          			<goal>run</goal>
+	          		</goals>
+	          		<configuration>
+	          			<target>
+	          				<echo message="argLine : ${argLine}"/>
+	          			</target>
+	          		</configuration>
+	          	</execution>
+	          </executions>
+	      	</plugin>
         </plugins>
     </build>
 </project>
